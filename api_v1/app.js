@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const userRoutes = require("./routes/users.routes");
-const notFound = require("./middleware/notFound");
+const notFound = require("./middleware/notFound.middleware");
 
 // Parse json from request
 app.use(express.json());

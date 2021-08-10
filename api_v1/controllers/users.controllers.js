@@ -40,16 +40,19 @@ exports.get_id = async(req, res, next) => {
 
 // Create a user
 exports.post = (req, res, next) => {
+    // TODO Write logic
     return res.status(201).json("/users/");
 }
 
 // Update a portion of a users data
 exports.patch = (req, res, next) => {
+     // TODO Write logic
     return res.status(200).json("/users/:id");
 }
 
 // Delete a user
 exports.delete = (req, res, next) => {
+     // TODO Write logic
     return res.status(204).json("/users/:id");
 }
 

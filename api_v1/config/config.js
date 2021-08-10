@@ -10,7 +10,7 @@ const BCRYPT_WORK_FACTOR = 10;
 
 const DB_URI =
   process.env.NODE_ENV === 'test'
-    ? 'postgresql:///poke_connect'
+    ? 'postgresql:///poke_connect_test'
     : 'postgresql:///poke_connect';
 
 module.exports = {

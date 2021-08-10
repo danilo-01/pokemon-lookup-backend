@@ -1,4 +1,4 @@
-const noMatch = (err, req, res, next) => {
+const notFound = (err, req, res, next) => {
     if(err){
         console.log(err);
         return res.status(err.status).json({
@@ -10,4 +10,4 @@ const noMatch = (err, req, res, next) => {
     })
 }
 
-module.exports = noMatch;
+module.exports = notFound;
