@@ -1,5 +1,4 @@
 const { User } = require("../models/users.models")
-const { response } = require("../helpers/response.helpers");
 
 // Get all users
 exports.get = async (req, res, next) => {
@@ -8,9 +7,9 @@ exports.get = async (req, res, next) => {
         const result = await User.getAll();
 
         // Decorate response
-        response.message = "Success";
-        response.data = result.rows;
-
+        response = {
+            users: result.rows,
+        }
         // Return data
         return res.status(200).json(response);
     }catch(err){
@@ -19,8 +18,23 @@ exports.get = async (req, res, next) => {
 }
 
 // Get one user
-exports.get_id = (req, res, next) => {
-    return res.json("/users/:id")
+exports.get_id = async(req, res, next) => {
+    try{
+        const {id} = req.params;
+
+        const result = await User.getOne(id);
+    
+        // Throw error if no user
+        if(!result.rows[0]) throw new Error("bad bruh");
+    
+        response = {
+            users: result.rows[0],
+        }
+    
+        return res.status(200).json(response);
+    }catch (err) {
+        return next(err);
+    }
 }
 
 // Create a user

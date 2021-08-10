@@ -8,9 +8,8 @@ class User {
     static async getOne(id){
         const result = await db.query(`
             SELECT * FROM users
-            WHERE id = $1`, [id]);
+            WHERE user_id = $1`, [id]);
         
-        console.log(result);
         return result;
     }
 
