@@ -5,7 +5,7 @@ CREATE DATABASE poke_connect;
 \c poke_connect;
 
 CREATE TABLE users (
-    user_id int PRIMARY KEY,
+    user_id SERIAL PRIMARY KEY,
     first_name varchar(20) NOT NULL,
     username varchar(15) UNIQUE,
     email varchar(255) UNIQUE,
@@ -13,7 +13,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE pokemon (
-    pokemon_id int PRIMARY KEY,
+    pokemon_id SERIAL PRIMARY KEY,
     name varchar(255) UNIQUE,
     api_id int UNIQUE
 );

@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const userRoutes = require("./routes/users.routes");
-const endpointNotFound = require("./middleware/endpointNotFound.middleware");
+const notFound = require("./middleware/notFound");
 
 // Parse json from request
 app.use(express.json());
@@ -10,6 +10,6 @@ app.use(express.json());
 app.use("/users", userRoutes);
 
 // 404 Not found
-app.use(endpointNotFound);
+app.use(notFound);
 
 module.exports = app;

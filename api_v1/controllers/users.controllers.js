@@ -1,3 +1,4 @@
+const ExpressError = require("../middleware/expressError.middleware");
 const { User } = require("../models/users.models")
 
 // Get all users
@@ -25,7 +26,7 @@ exports.get_id = async(req, res, next) => {
         const result = await User.getOne(id);
     
         // Throw error if no user
-        if(!result.rows[0]) throw new Error("bad bruh");
+        if(!result.rows[0]) throw new ExpressError(`No user found with id of "${id}"`, 404);
     
         response = {
             users: result.rows[0],
