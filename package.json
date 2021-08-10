@@ -4,7 +4,7 @@
   "description": "Back-end for Capstone 2",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest api_v1/__tests__"
   },
   "repository": {
     "type": "git",
