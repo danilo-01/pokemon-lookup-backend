@@ -1,8 +1,21 @@
-const {User} = require("../models/users.models")
+const { User } = require("../models/users.models")
+const { response } = require("../helpers/response.helpers");
 
 // Get all users
-exports.get = (req, res, next) => {
-    return res.json("/users/")
+exports.get = async (req, res, next) => {
+    try{
+        // Interact with database
+        const result = await User.getAll();
+
+        // Decorate response
+        response.message = "Success";
+        response.data = result.rows;
+
+        // Return data
+        return res.status(200).json(response);
+    }catch(err){
+        return next(err);
+    }
 }
 
 // Get one user
