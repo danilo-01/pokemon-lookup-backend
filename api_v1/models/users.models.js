@@ -36,7 +36,7 @@ class User {
     static async updateInfo(id, data){
         const { username, firstName, email } = data;
         const {setString, vals} = JsToSQL.setString({username, firstName, email})
-        
+
         const result = await db.query(`
             UPDATE users SET ${setString}
             WHERE user_id=$${vals.length + 1}
