@@ -1,11 +1,15 @@
 Implement JSON schema body validation
 
+Write authentication tests
+
 Create authentication routes, controllers
 
 Implement authentication middleware
 
 Test authentication routes
 
+
+Write pokemon tests
 
 Create pokemon routes, controllers, models
 
