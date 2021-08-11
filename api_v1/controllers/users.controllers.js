@@ -1,17 +1,24 @@
+const SqlToJs = require("../helpers/sqlToJs.helpers");
 const ExpressError = require("../middleware/expressError.middleware");
 const { User } = require("../models/users.models")
 
 // Get all users
 exports.get = async (req, res, next) => {
     try{
-        // JSON SCHEME VALIDATION
-
-        // DATABASE VALIDATION
+        // NO SCHEMA VALIDATION NEEDED  
         const result = await User.getAll();
+
+        // ERROR IF NO USER
+        if(!result.rows[0]) throw new ExpressError(`No users in database."`, 404);
+
+        // CLEAN RESULT
+        SqlToJs.convert(result.rows[0], "first_name", "firstName");
+        SqlToJs.convert(result.rows[0], "user_id", "userId");
 
         // SUCCESS
         return res.status(200).json(result.rows);
     }catch(err){
+        console.log(err);
         return next(err);
     }
 }
@@ -19,17 +26,23 @@ exports.get = async (req, res, next) => {
 // Get one user
 exports.get_id = async (req, res, next) => {
     try{
-        // JSON SCHEME VALIDATION
+        // NO SCHEMA VALIDATION NEEDED  
 
-        // DATABASE VALIDATION
-        const result = await User.getOne(req.params.id);
+        // DATABASE VALIDATION 
+        const { id } = req.params;
+        const result = await User.getOne(id);
     
-        // Throw error if no user
+        // ERROR IF NO USER
         if(!result.rows[0]) throw new ExpressError(`No user found with id of "${id}"`, 404);
         
+        // CLEAN RESULT
+        SqlToJs.convert(result.rows[0], "first_name", "firstName");
+        SqlToJs.convert(result.rows[0], "user_id", "userId");
+
         // SUCCESS
-        return res.status(200).json(result.rows[0]);
+        return res.status(200).json([result.rows[0]]);
     }catch (err) {
+        if(err.code == "22P02") next(new ExpressError("Invalid input syntax in paramater", 400));
         return next(err);
     }
 }
@@ -41,7 +54,13 @@ exports.post = async (req, res, next) => {
 
         // DATABASE VALIDATION
         const result = await User.create(req.body);
-        return res.status(201).json(result.rows[0]);
+
+        // CLEAN RESULT
+        SqlToJs.convert(result.rows[0], "first_name", "firstName");
+        SqlToJs.convert(result.rows[0], "user_id", "userId");
+
+        // SUCCESS
+        return res.status(201).json([result.rows[0]]);
     }catch(err){
         if(err.code == "23505") next(new ExpressError(`User "${req.body.username}" already exists.`, 409));
 
@@ -58,9 +77,14 @@ exports.patch = async (req, res, next) => {
         const result = await User.updateInfo(req.params.id, req.body);
         if(!result.rows[0]) throw new ExpressError(`User with id of ${req.params.id} does not exist`, 404);
 
+        // CLEAN RESULT
+        SqlToJs.convert(result.rows[0], "first_name", "firstName");
+        SqlToJs.convert(result.rows[0], "user_id", "userId");
+
         // SUCCESS!
-        return res.status(200).json(result.rows[0]);
+        return res.status(200).json([result.rows[0]]);
     }catch(err){
+        console.log(err);
         if(err.code == "42601") next(new ExpressError("Invalid values to update.", 400));
         next(err);
     }
@@ -72,15 +96,15 @@ exports.delete = async (req, res, next) => {
         // JSON SCHEME VALIDATION
 
         // DATABASE VALIDATION
-        const result = await User.delete(req.params);
+        const result = await User.delete(req.params.id);
         
-        // Handle user not found
+        // ERROR IF NO USER
         if(!result.rows.length) throw new ExpressError(`User with id of ${req.params.id} does not exist`, 404);
         
         // SUCCESS
         return res.status(204).send();
     }catch(err){
-        // Handle invalid param
+        // INVALID PARAM
         if(err.code == "22P02") next(new ExpressError("id must be an integer.", 400));
         console.log(err);
         next(err);
