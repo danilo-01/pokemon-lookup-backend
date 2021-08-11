@@ -6,9 +6,9 @@ CREATE DATABASE poke_connect_test;
 
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
-    first_name varchar(20) NOT NULL,
+    first_name varchar(50) NOT NULL,
     username varchar(15) UNIQUE,
-    email varchar(255) UNIQUE,
+    email varchar(50) UNIQUE,
     hashed_password varchar(255) NOT NULL
 );
 

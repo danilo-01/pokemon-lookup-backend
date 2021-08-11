@@ -19,8 +19,9 @@ exports.get = async (req, res, next) => {
 }
 
 // Get one user
-exports.get_id = async(req, res, next) => {
+exports.get_id = async (req, res, next) => {
     try{
+        // TODO Validation 
         const {id} = req.params;
 
         const result = await User.getOne(id);
@@ -39,21 +40,50 @@ exports.get_id = async(req, res, next) => {
 }
 
 // Create a user
-exports.post = (req, res, next) => {
-    // TODO Write logic
-    return res.status(201).json("/users/");
+exports.post = async (req, res, next) => {
+    try{
+        // TODO Validation  
+        const result = await User.create(req.body);
+        return res.status(201).json(result.rows[0]);
+    }catch(err){
+        if(err.code == "23505") next(new ExpressError(`User "${req.body.username}" already exists.`, 409));
+
+        next(new ExpressError("Internal server error"));
+    }
 }
 
 // Update a portion of a users data
-exports.patch = (req, res, next) => {
-     // TODO Write logic
-    return res.status(200).json("/users/:id");
+exports.patch = async (req, res, next) => {
+    // TODO Validation 
+    try{
+
+        const result = await User.updateInfo(req.params.id, req.body);
+        
+        if(!result.rows[0]) throw new ExpressError(`User with id of ${req.params.id} does not exist`, 404);
+
+        return res.status(200).json(result.rows[0]);
+    }catch(err){
+        if(err.code == "42601") next(new ExpressError("Invalid values to update.", 400));
+        next(err);
+    }
 }
 
 // Delete a user
-exports.delete = (req, res, next) => {
-     // TODO Write logic
-    return res.status(204).json("/users/:id");
+exports.delete = async (req, res, next) => {
+    try{
+        // TODO validation
+        const result = await User.delete(req.params);
+        
+        // Handle user not found
+        if(!result.rows.length) throw new ExpressError(`User with id of ${req.params.id} does not exist`, 404);
+
+        return res.status(204).send();
+    }catch(err){
+        // Handle invalid param
+        if(err.code == "22P02") next(new ExpressError("id must be an integer.", 400));
+        console.log(err);
+        next(err);
+    }
 }
 
 
