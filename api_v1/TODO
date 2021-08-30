@@ -1,10 +1,7 @@
-Implement JSON schema body validation
 
 Write authentication tests
 
-Create authentication routes, controllers
-
-Implement authentication middleware
+**Implement authentication middleware
 
 Test authentication routes
 

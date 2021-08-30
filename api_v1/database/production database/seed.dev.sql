@@ -1,6 +1,6 @@
--- Seed data for test database
+-- Seed data for database
 
-\c poke_connect_test;
+\c poke_connect;
 
 INSERT INTO users (username, first_name, email, hashed_password) 
 VALUES ('test user1', 'test', 'test1@test.com', 'testpassword');
