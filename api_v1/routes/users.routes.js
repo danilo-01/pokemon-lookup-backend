@@ -5,7 +5,7 @@ const authToken = require("../middleware/authToken.middleware");
 const hasRole = require("../middleware/hasRole.middleware");
 
 // Get data about all users
-router.get("/", authToken, user_controller.get);
+router.get("/",  user_controller.get);
 
 // Get data about a single user
 router.get("/:username", authToken, user_controller.get_one);
