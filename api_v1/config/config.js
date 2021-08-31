@@ -13,9 +13,16 @@ const DB_URI =
     ? 'postgresql:///poke_connect_test'
     : 'postgresql:///poke_connect';
 
+    function getDatabaseUri() {
+      return (process.env.NODE_ENV === "test")
+          ? "poke_connect_test"
+          : process.env.DATABASE_URL || "poke_connect";
+    }
+
 module.exports = {
   BCRYPT_WORK_FACTOR,
   SECRET_KEY,
   PORT,
-  DB_URI
+  DB_URI,
+  getDatabaseUri
 };

@@ -16,20 +16,20 @@ const Pokemon = require("../models/pokemon.models");
 exports.get = async (req, res, next) => {
     try {
         // NO SCHEMA VALIDATION NEEDED  
-        // const result = await User.getAll();
+        const result = await User.getAll();
 
-        // // ERROR IF NO USERS
-        // if (!result.rows[0]) throw new ExpressError(`No users in database."`, 404);
+        // ERROR IF NO USERS
+        if (!result.rows[0]) throw new ExpressError(`No users in database."`, 404);
         
-        // // CLEAN RESULT
-        // for(let i = 0; i < result.rows.length; i++){
-        //     SqlToJs.convert(result.rows[i], "first_name", "firstName");
-        //     SqlToJs.convert(result.rows[i], "user_id", "userId");
-        //     SqlToJs.convert(result.rows[i], "is_admin", "isAdmin");
-        // }
+        // CLEAN RESULT
+        for(let i = 0; i < result.rows.length; i++){
+            SqlToJs.convert(result.rows[i], "first_name", "firstName");
+            SqlToJs.convert(result.rows[i], "user_id", "userId");
+            SqlToJs.convert(result.rows[i], "is_admin", "isAdmin");
+        }
 
         // SUCCESS
-        return res.status(200).json("result.rows");
+        return res.status(200).json(result.rows);
     } catch (err) {
 
         return next(new ExpressError("Server error"));

@@ -1,9 +1,18 @@
 const { Client } = require("pg");
-const { DB_URI } = require("../config/config.js");
+const { getDatabaseUri } = require("../config/config.js");
 
-let db = new Client({
-    connectionString: DB_URI
-});
+if (process.env.NODE_ENV === "production") {
+    db = new Client({
+      connectionString: getDatabaseUri(),
+      ssl: {
+        rejectUnauthorized: false
+      }
+    });
+  } else {
+    db = new Client({
+      connectionString: getDatabaseUri()
+    });
+  }
 
 db.connect();
 
